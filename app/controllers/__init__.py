@@ -1,0 +1,4 @@
+from app.controllers.post_controllers import post_lead_controller
+from app.controllers.get_controllers import get_leads_controller
+from app.controllers.patch_controllers import patch_lead_controller
+from app.controllers.delete_controllers import delete_lead_controller
