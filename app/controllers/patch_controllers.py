@@ -1,7 +1,7 @@
 from flask import request, current_app
 from app.models import Lead
 from datetime import datetime
-from app.exc import InvalidKey
+from app.exc import InvalidKey, InvalidTypeValue
 
 def patch_lead_controller():
     data = request.get_json()
@@ -10,6 +10,9 @@ def patch_lead_controller():
     try:
         if len(invalid_keys)>0:
             raise InvalidKey("email", invalid_keys)
+
+        if type(data["email"]) != str:
+            raise InvalidTypeValue("email")
 
         lead = Lead.query.filter_by(email=data["email"]).first()
         new_data_and_visit = {"last_visit": datetime.now(), "visit": lead.__dict__["visit"]+1 }
@@ -25,4 +28,7 @@ def patch_lead_controller():
         return {"error": f"Email {data['email']} do not exists"}, 404
     
     except InvalidKey as err:
+        return err.message, 400
+    
+    except InvalidTypeValue as err:
         return err.message, 400

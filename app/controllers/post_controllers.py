@@ -47,7 +47,16 @@ def post_lead_controller():
         current_app.db.session.add(lead)
         current_app.db.session.commit()    
 
-        return jsonify(lead), 201
+        serializer = {
+            "name": lead.name,
+            "email": lead.email,
+            "phone": lead.phone,
+            "creation_date": lead.creation_date,
+            "last_visit": lead.last_visit,
+            "visit": lead.visit
+        }
+
+        return jsonify(serializer), 201
 
     except InvalidKey as err:
         return err.message,400
